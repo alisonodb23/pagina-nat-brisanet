@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROBLEMA DE NAT COM BRISANET</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #f08a06 0%, #ff9f20 100%);
+        }
+        
+        .card {
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .solution-card {
+            transition: all 0.3s ease;
+        }
+        
+        .solution-card:hover {
+            transform: scale(1.02);
+        }
+
+        .highlight-box {
+            border-left: 4px solid #0f4c81;
+        }
+
+        .brisanet-color {
+            color: #0f4c81;
+        }
+
+        .brisanet-bg {
+            background-color: #0f4c81;
+        }
+
+        .brisanet-border {
+            border-color: #0f4c81;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-2{margin-left:0.5rem;margin-right:0.5rem}.mx-auto{margin-left:auto;margin-right:auto}.my-2{margin-top:0.5rem;margin-bottom:0.5rem}.mb-10{margin-bottom:2.5rem}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-20{margin-bottom:5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mr-2{margin-right:0.5rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-10{margin-top:2.5rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-12{height:3rem}.h-16{height:4rem}.h-24{height:6rem}.h-5{height:1.25rem}.h-auto{height:auto}.w-12{width:3rem}.w-16{width:4rem}.w-24{width:6rem}.w-5{width:1.25rem}.w-full{width:100%}.max-w-4xl{max-width:56rem}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.list-decimal{list-style-type:decimal}.list-disc{list-style-type:disc}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-gray-200 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(229 231 235 / var(--tw-divide-opacity, 1))}.overflow-hidden{overflow:hidden}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-blue-600{--tw-border-opacity:1;border-color:rgb(37 99 235 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81 / var(--tw-border-opacity, 1))}.border-red-200{--tw-border-opacity:1;border-color:rgb(254 202 202 / var(--tw-border-opacity, 1))}.border-white{--tw-border-opacity:1;border-color:rgb(255 255 255 / var(--tw-border-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity, 1))}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(254 252 232 / var(--tw-bg-opacity, 1))}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pl-4{padding-left:1rem}.pl-5{padding-left:1.25rem}.pt-8{padding-top:2rem}.text-left{text-align:left}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-50{--tw-text-opacity:1;color:rgb(249 250 251 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-500{--tw-text-opacity:1;color:rgb(34 197 94 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-purple-800{--tw-text-opacity:1;color:rgb(107 33 168 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-red-800{--tw-text-opacity:1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-600{--tw-text-opacity:1;color:rgb(202 138 4 / var(--tw-text-opacity, 1))}.text-yellow-800{--tw-text-opacity:1;color:rgb(133 77 14 / var(--tw-text-opacity, 1))}.opacity-90{opacity:0.9}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.hover\:bg-blue-50:hover{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.hover\:bg-opacity-10:hover{--tw-bg-opacity:0.1}.hover\:text-blue-600:hover{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}}@media (min-width: 768px){.md\:mb-0{margin-bottom:0px}.md\:w-1\/3{width:33.333333%}.md\:w-1\/4{width:25%}.md\:w-2\/3{width:66.666667%}.md\:w-3\/4{width:75%}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:py-24{padding-top:6rem;padding-bottom:6rem}.md\:text-2xl{font-size:1.5rem;line-height:2rem}.md\:text-5xl{font-size:3rem;line-height:1}}</style></head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Guia para Suporte Técnico  Problemas de Nat na Brisanet</h1>
+                <p class="text-xl md:text-2xl opacity-90">Entenda por que o cliente precisa de IP fixo e roteador próprio para resolver problemas de NAT</p>
+                <div class="mt-10">
+                    <a href="#problema-nat" class="bg-white text-blue-700 font-medium px-6 py-3 rounded-lg hover:bg-blue-50 transition duration-300 mx-2 my-2 inline-block">Entender o Problema</a>
+                    <a href="#solucao-brisanet" class="bg-transparent border-2 border-white text-white font-medium px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300 mx-2 my-2 inline-block">Ver Solução</a>
+                </div>
+            </div>
+        </div>
+        
+        <svg class="w-full h-16 text-gray-50 block" viewBox="0 0 1440 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 48h1440V0c-211.98 21.297-433.96 37.297-720 37.297S211.98 21.297 0 0v48z"></path>
+        </svg>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+        <!-- Problema NAT na Brisanet -->
+        <section id="problema-nat" class="max-w-4xl mx-auto mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">O Problema de NAT na Brisanet</h2>
+                <p class="text-lg text-gray-600">Por que muitos clientes enfrentam problemas de conectividade</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-md p-8">
+                <div class="flex flex-col md:flex-row items-center gap-8 mb-8">
+                    <div class="md:w-1/3">
+                        <svg class="w-full h-auto" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="10" y="40" width="180" height="120" rx="8" fill="#e0e7ff" stroke="#0f4c81" stroke-width="3"></rect>
+                            <rect x="20" y="60" width="50" height="30" rx="4" fill="#93c5fd"></rect>
+                            <rect x="20" y="110" width="50" height="30" rx="4" fill="#93c5fd"></rect>
+                            <rect x="130" y="60" width="50" height="30" rx="4" fill="#93c5fd"></rect>
+                            <rect x="130" y="110" width="50" height="30" rx="4" fill="#93c5fd"></rect>
+                            <path d="M70 75 H120 M120 75 L110 65 M120 75 L110 85" stroke="#0f4c81" stroke-width="3"></path>
+                            <path d="M70 125 H120 M120 125 L110 115 M120 125 L110 135" stroke="#0f4c81" stroke-width="3"></path>
+                            <circle cx="45" cy="100" r="10" fill="#dbeafe" stroke="#0f4c81" stroke-width="3"></circle>
+                            <text x="80" y="105" font-family="Arial" font-size="12" font-weight="bold" fill="#0f4c81">CGNAT</text>
+                        </svg>
+                    </div>
+                    <div class="md:w-2/3">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">CGNAT na Brisanet</h3>
+                        <p class="text-gray-700 mb-4">A Brisanet, como muitos provedores de internet, utiliza CGNAT (Carrier-Grade NAT) para gerenciar a escassez de endereços IPv4. Com o CGNAT, múltiplos clientes compartilham um único endereço IP público.</p>
+                        <p class="text-gray-700">Esta tecnologia cria uma camada adicional de NAT, resultando em:</p>
+                        <ul class="list-disc pl-5 text-gray-700 mt-3">
+                            <li>NAT Duplo ou NAT Restrito/Moderado para a maioria dos clientes</li>
+                            <li>Impossibilidade de configurar encaminhamento de portas no equipamento da Brisanet</li>
+                            <li>Bloqueio de conexões de entrada necessárias para muitos aplicativos e jogos</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 p-6 rounded-lg mb-8">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Limitações do Equipamento da Brisanet</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium text-gray-800 mb-2">Restrições de Configuração:</h4>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>Sem acesso a configurações de DMZ</li>
+                                <li>Sem possibilidade de configurar Port Forwarding</li>
+                                <li>Impossibilidade de alterar o tipo de NAT</li>
+                                <li>Acesso limitado à interface de administração</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-800 mb-2">Impacto para o Usuário:</h4>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>Problemas em jogos online (matchmaking limitado)</li>
+                                <li>Dificuldades com chat de voz em jogos</li>
+                                <li>Impossibilidade de hospedar servidores</li>
+                                <li>Problemas com aplicativos P2P</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box pl-4 py-1">
+                    <p class="text-gray-700 italic">
+                        "Devido à implementação do CGNAT na Brisanet e o Firmware do Roteador, não é possível configurar o equipamento fornecido pelo provedor para resolver problemas de NAT. A única solução eficaz é contratar um IP fixo e utilizar um roteador próprio."
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tipos de NAT -->
+        <section id="tipos-de-nat" class="max-w-4xl mx-auto mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Tipos de NAT e Seus Impactos</h2>
+                <p class="text-lg text-gray-600">Entenda como cada tipo de NAT afeta sua experiência online</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                <div class="flex border-b border-gray-200">
+                    <button id="tab-nat-aberto" class="tab-button px-6 py-3 font-medium text-blue-600 border-b-2 border-blue-600">NAT Aberto</button>
+                    <button id="tab-nat-moderado" class="tab-button px-6 py-3 font-medium text-gray-500 hover:text-blue-600">NAT Moderado</button>
+                    <button id="tab-nat-estrito" class="tab-button px-6 py-3 font-medium text-gray-500 hover:text-blue-600">NAT Estrito</button>
+                    <button id="tab-duplo-nat" class="tab-button px-6 py-3 font-medium text-gray-500 hover:text-blue-600">Duplo NAT</button>
+                </div>
+                
+                <div id="content-nat-aberto" class="tab-content active p-6">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/4">
+                            <div class="bg-green-100 p-4 rounded-lg text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <h3 class="mt-2 font-semibold text-green-800">Melhor Conectividade</h3>
+                            </div>
+                        </div>
+                        <div class="md:w-3/4">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">NAT Aberto (Tipo 1)</h3>
+                            <p class="text-gray-700 mb-4">O NAT Aberto permite conexões de entrada e saída sem restrições significativas. Dispositivos com NAT Aberto podem:</p>
+                            <ul class="list-disc pl-5 text-gray-700 mb-4">
+                                <li>Receber conexões de qualquer dispositivo externo</li>
+                                <li>Iniciar conexões com qualquer dispositivo externo</li>
+                                <li>Ter melhor desempenho em jogos online e aplicativos P2P</li>
+                            </ul>
+                            <div class="bg-yellow-50 p-3 rounded-lg">
+                                <p class="text-yellow-800 text-sm flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <strong>Na Brisanet:</strong> Só é possível obter NAT Aberto contratando um IP fixo e utilizando um roteador próprio configurado adequadamente.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="content-nat-moderado" class="tab-content p-6">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/4">
+                            <div class="bg-yellow-100 p-4 rounded-lg text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <h3 class="mt-2 font-semibold text-yellow-800">Conectividade Parcial</h3>
+                            </div>
+                        </div>
+                        <div class="md:w-3/4">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">NAT Moderado (Tipo 2)</h3>
+                            <p class="text-gray-700 mb-4">O NAT Moderado permite conexões de entrada apenas de dispositivos com os quais você já estabeleceu uma conexão prévia. Características:</p>
+                            <ul class="list-disc pl-5 text-gray-700 mb-4">
+                                <li>Permite iniciar conexões com qualquer dispositivo externo</li>
+                                <li>Aceita conexões de entrada apenas de dispositivos com os quais você já se comunicou</li>
+                                <li>Funciona para a maioria dos jogos, mas pode apresentar problemas em alguns casos</li>
+                            </ul>
+                            <div class="bg-yellow-50 p-3 rounded-lg">
+                                <p class="text-yellow-800 text-sm flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <strong>Na Brisanet:</strong> Muitos clientes enfrentam NAT Moderado devido ao CGNAT, e não é possível melhorar isso sem contratar IP fixo.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="content-nat-estrito" class="tab-content p-6">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/4">
+                            <div class="bg-red-100 p-4 rounded-lg text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                                <h3 class="mt-2 font-semibold text-red-800">Conectividade Limitada</h3>
+                            </div>
+                        </div>
+                        <div class="md:w-3/4">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">NAT Fechado (Tipo 3)</h3>
+                            <p class="text-gray-700 mb-4">O NAT Estrito é o tipo mais restritivo, bloqueando a maioria das conexões de entrada. Características:</p>
+                            <ul class="list-disc pl-5 text-gray-700 mb-4">
+                                <li>Permite iniciar conexões com servidores externos</li>
+                                <li>Bloqueia praticamente todas as conexões de entrada não solicitadas</li>
+                                <li>Causa problemas significativos em jogos online e aplicativos P2P</li>
+                            </ul>
+                            <div class="bg-yellow-50 p-3 rounded-lg">
+                                <p class="text-yellow-800 text-sm flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <strong>Na Brisanet:</strong> Alguns clientes enfrentam NAT Estrito devido ao CGNAT e configurações de rede. A única solução é contratar IP fixo.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="content-duplo-nat" class="tab-content p-6">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/4">
+                            <div class="bg-purple-100 p-4 rounded-lg text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <h3 class="mt-2 font-semibold text-purple-800">Problema Comum na Brisanet</h3>
+                            </div>
+                        </div>
+                        <div class="md:w-3/4">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">Duplo NAT</h3>
+                            <p class="text-gray-700 mb-4">O Duplo NAT ocorre quando seu tráfego passa por dois dispositivos que realizam NAT antes de chegar à internet. Na Brisanet, isso é comum porque:</p>
+                            <ul class="list-disc pl-5 text-gray-700 mb-4">
+                                <li>O provedor utiliza CGNAT (primeira camada de NAT)</li>
+                                <li>O roteador do cliente realiza uma segunda camada de NAT</li>
+                                <li>Resulta em problemas severos de conectividade para jogos e aplicativos</li>
+                            </ul>
+                            <div class="bg-red-50 p-3 rounded-lg">
+                                <p class="text-red-800 text-sm flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    </svg>
+                                    <strong>Na Brisanet:</strong> O Duplo NAT é extremamente comum e só pode ser resolvido com IP fixo, eliminando a camada de CGNAT.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Solução para Brisanet -->
+        <section id="solucao-brisanet" class="max-w-4xl mx-auto mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">A Única Solução Eficaz para Clientes Brisanet</h2>
+                <p class="text-lg text-gray-600">IP Fixo + Roteador Próprio: Por que esta combinação é necessária</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-md p-8">
+                <div class="flex flex-col md:flex-row items-center gap-8 mb-10">
+                    <div class="md:w-1/3">
+                        <div class="bg-blue-50 p-6 rounded-lg text-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                            <h3 class="mt-4 text-xl font-bold text-gray-800">Solução Completa</h3>
+                        </div>
+                    </div>
+                    <div class="md:w-2/3">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Por que esta é a única solução que funciona</h3>
+                        <p class="text-gray-700 mb-4">Devido às restrições da rede Brisanet e à implementação do CGNAT, a única maneira eficaz de resolver problemas de NAT é:</p>
+                        <ol class="list-decimal pl-5 text-gray-700 space-y-2">
+                            <li><strong>Contratar um IP fixo da Brisanet</strong> - Isso elimina o CGNAT e fornece um endereço IP público exclusivo para sua conexão</li>
+                            <li><strong>Substituir o equipamento da Brisanet por um roteador próprio</strong> - Isso permite configurar o roteador conforme necessário para obter NAT Aberto</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Benefícios do IP Fixo</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">Elimina o CGNAT, removendo uma camada de NAT</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">Fornece um endereço IP público exclusivo para sua conexão</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">Permite receber conexões de entrada da internet</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">Mantém o mesmo endereço IP, facilitando configurações</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Vantagens do Roteador Próprio</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">Acesso total às configurações de rede</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">Possibilidade de configurar DMZ e Port Forwarding</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">Controle sobre UPnP e outras tecnologias de NAT Traversal</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">Geralmente melhor desempenho e mais recursos</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 p-6 rounded-lg mb-8">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Como Implementar a Solução</h3>
+                    <ol class="list-decimal pl-5 text-gray-700 space-y-4">
+                        <li>
+                            <strong>Contrate o serviço de IP fixo da Brisanet</strong>
+                            <p class="mt-1 text-sm">Entre em contato com o suporte da Brisanet e solicite a contratação do serviço de IP fixo. Pergunte sobre os custos adicionais e o prazo para ativação.</p>
+                        </li>
+                        <li>
+                            <strong>Adquira um roteador de qualidade</strong>
+                            <p class="mt-1 text-sm">Escolha um roteador com boas avaliações e recursos adequados para suas necessidades. Modelos da TP-Link, ASUS ou Mikrotik são geralmente boas opções.</p>
+                        </li>
+                        <li>
+                            <strong>Configure o equipamento da Brisanet em modo bridge</strong>
+                            <p class="mt-1 text-sm">Solicite ao técnico da Brisanet que configure o equipamento(ONU) deles em modo bridge. peça orientações sobre como conectar seu roteador com ppoe e senha.</p>
+                        </li>
+                        <li>
+                            <strong>Configure seu roteador próprio</strong>
+                            <p class="mt-1 text-sm">Configure seu roteador com as credenciais PPPoE fornecidas pela Brisanet (se necessário) e ajuste as configurações de NAT e firewall para obter NAT Aberto.</p>
+                        </li>
+                        <li>
+                            <strong>Verifique se o NAT está aberto</strong>
+                            <p class="mt-1 text-sm">Teste sua conexão em jogos ou aplicativos que antes apresentavam problemas para confirmar que o NAT agora está aberto.</p>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="p-6 border border-red-200 rounded-lg bg-red-50">
+                    <h3 class="text-lg font-semibold text-red-800 mb-3 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                        Importante: Por que outras soluções não funcionam na Brisanet
+                    </h3>
+                    <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                        <li><strong>DMZ no equipamento da Brisanet:</strong> Não é possível configurar DMZ no equipamento fornecido pela Brisanet quando você está sob CGNAT.</li>
+                        <li><strong>Port Forwarding:</strong> O encaminhamento de portas não funciona sob CGNAT, pois você não tem um IP público exclusivo.</li>
+                        <li><strong>UPnP:</strong> Mesmo com UPnP ativado, o CGNAT impede que ele funcione corretamente para abrir portas.</li>
+                        <li><strong>VPNs comuns:</strong> Muitas VPNs não resolvem problemas de NAT para jogos, pois adicionam outra camada de NAT.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Recomendações de Roteadores -->
+        <section id="recomendacoes" class="max-w-4xl mx-auto mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Recomendações de Roteadores</h2>
+                <p class="text-lg text-gray-600">Opções de roteadores para substituir o roteador da Brisanet</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex justify-center mb-4">
+                            <svg class="w-24 h-24 text-blue-600" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="40" y="60" width="120" height="80" rx="8" fill="currentColor"></rect>
+                                <circle cx="60" cy="80" r="5" fill="white"></circle>
+                                <circle cx="80" cy="80" r="5" fill="white"></circle>
+                                <circle cx="100" cy="80" r="5" fill="white"></circle>
+                                <circle cx="120" cy="80" r="5" fill="white"></circle>
+                                <circle cx="140" cy="80" r="5" fill="white"></circle>
+                                <rect x="55" y="100" width="90" height="20" rx="4" fill="white"></rect>
+                                <path d="M70 140 L70 120 M100 140 L100 120 M130 140 L130 120" stroke="white" stroke-width="3"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-center text-gray-800 mb-2">Roteadores Básicos</h3>
+                        <p class="text-gray-700 mb-4 text-center">Opções acessíveis para necessidades comuns</p>
+                        <ul class="space-y-2 mb-4">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">TP-Link Archer C6</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">Mercusys AC12G</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">Intelbras Action RG 1200</span>
+                            </li>
+                        </ul>
+                        <p class="text-sm text-gray-600 italic">Ideal para uso doméstico básico e jogos casuais</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border-2 border-blue-500">
+                    <div class="bg-blue-500 text-white text-center py-1 text-sm font-medium">
+                        RECOMENDADO
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-center mb-4">
+                            <svg class="w-24 h-24 text-blue-600" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="30" y="60" width="140" height="80" rx="8" fill="currentColor"></rect>
+                                <circle cx="50" cy="80" r="5" fill="white"></circle>
+                                <circle cx="70" cy="80" r="5" fill="white"></circle>
+                                <circle cx="90" cy="80" r="5" fill="white"></circle>
+                                <circle cx="110" cy="80" r="5" fill="white"></circle>
+                                <circle cx="130" cy="80" r="5" fill="white"></circle>
+                                <circle cx="150" cy="80" r="5" fill="white"></circle>
+                                <rect x="45" y="100" width="110" height="20" rx="4" fill="white"></rect>
+                                <path d="M60 140 L60 120 M100 140 L100 120 M140 140 L140 120" stroke="white" stroke-width="3"></path>
+                                <path d="M80 50 L120 50 L120 60 L80 60 Z" fill="white"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-center text-gray-800 mb-2">Roteadores Intermediários</h3>
+                        <p class="text-gray-700 mb-4 text-center">Melhor custo-benefício para gamers</p>
+                        <ul class="space-y-2 mb-4">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">TP-Link Archer AX50</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">ASUS RT-AX58U</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">Mikrotik hAP ac²</span>
+                            </li>
+                        </ul>
+                        <p class="text-sm text-gray-600 italic">Perfeito para jogadores online e múltiplos dispositivos</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex justify-center mb-4">
+                            <svg class="w-24 h-24 text-blue-600" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M40 60 L100 40 L160 60 L160 140 L100 160 L40 140 Z" fill="currentColor"></path>
+                                <circle cx="60" cy="80" r="5" fill="white"></circle>
+                                <circle cx="80" cy="70" r="5" fill="white"></circle>
+                                <circle cx="100" cy="65" r="5" fill="white"></circle>
+                                <circle cx="120" cy="70" r="5" fill="white"></circle>
+                                <circle cx="140" cy="80" r="5" fill="white"></circle>
+                                <rect x="60" y="100" width="80" height="20" rx="4" fill="white"></rect>
+                                <path d="M70 140 L70 120 M100 145 L100 120 M130 140 L130 120" stroke="white" stroke-width="3"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-center text-gray-800 mb-2">Roteadores Avançados</h3>
+                        <p class="text-gray-700 mb-4 text-center">Para usuários exigentes e profissionais</p>
+                        <ul class="space-y-2 mb-4">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">ASUS RT-AX86U</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">TP-Link Archer AX6000</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-gray-700">Mikrotik RB4011</span>
+                            </li>
+                        </ul>
+                        <p class="text-sm text-gray-600 italic">Ideal para streaming, servidores domésticos e gamers profissionais</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-10 bg-white rounded-xl shadow-md p-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Configurando seu Roteador para NAT Aberto</h3>
+                <p class="text-gray-700 mb-6">Após adquirir seu IP fixo e roteador próprio, siga estas orientações para obter NAT Aberto:</p>
+                
+                <div class="space-y-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-gray-800 mb-2">1. Configuração Básica</h4>
+                        <ul class="list-disc pl-5 text-gray-700">
+                            <li>Configure seu roteador com as credenciais PPPoE fornecidas pela Brisanet</li>
+                            <li>Verifique se o roteador está recebendo o IP fixo contratado</li>
+                            <li>Desative qualquer função de "Firewall Avançado" ou "Proteção Avançada"</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-gray-800 mb-2">2. Configurações de NAT</h4>
+                        <ul class="list-disc pl-5 text-gray-700">
+                            <li>Ative UPnP (Universal Plug and Play)</li>
+                            <li>Ative NAT-PMP (se disponível)</li>
+                            <li>Configure o DMZ para o dispositivo que precisa de NAT Aberto (console ou PC)</li>
+                            <li>Desative SPI (Stateful Packet Inspection) se estiver causando problemas</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-gray-800 mb-2">3. Configurações Específicas para Jogos</h4>
+                        <ul class="list-disc pl-5 text-gray-700">
+                            <li>Configure encaminhamento de portas para jogos específicos que você utiliza</li>
+                            <li>Verifique se há alguma configuração de "Gaming Mode" ou "Game Boost" no seu roteador</li>
+                            <li>Priorize o tráfego do seu dispositivo de jogos usando QoS (Quality of Service)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                    <p class="text-blue-800 flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>
+                            <strong>Dica:</strong> Se o cliente não conseguir configurar ip fixo no roteador, deve se considerar o envio do tecnico da Brisanet para ajudá-lo. A configuração correta é essencial para obter NAT Aberto.
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FAQ -->
+        <section id="faq" class="max-w-4xl mx-auto mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Perguntas Frequentes</h2>
+                <p class="text-lg text-gray-600">Respostas para dúvidas comuns de clientes Brisanet</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="divide-y divide-gray-200">
+                    <div class="faq-item">
+                        <button class="faq-question w-full px-6 py-4 text-left font-medium text-gray-800 hover:bg-gray-50 focus:outline-none flex justify-between items-center">
+                            <span>Quanto custa o IP fixo na Brisanet?</span>
+                            <svg class="faq-arrow h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-answer px-6 py-4 bg-gray-50 hidden">
+                            <p class="text-gray-700">O custo do IP fixo na Brisanet e de R$ 50 reais. Para obter o serviço do ip fixo, é necessário entrar em contato diretamente com a Brisanet através do canal de atendimento Sac Comercial Fone: 10517</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <button class="faq-question w-full px-6 py-4 text-left font-medium text-gray-800 hover:bg-gray-50 focus:outline-none flex justify-between items-center">
+                            <span>Posso usar o roteador da Brisanet junto com o meu próprio?</span>
+                            <svg class="faq-arrow h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-answer px-6 py-4 bg-gray-50 hidden">
+                            <p class="text-gray-700">Sim, é possível usar o roteador da Brisanet em conjunto com o seu próprio, mas isso pode criar uma situação de Duplo NAT se não for configurado corretamente. O ideal é:</p>
+                            <ul class="list-disc pl-5 text-gray-700 mt-2">
+                                <li>Solicitar que o técnico da Brisanet configure a ONU deles em modo bridge</li>
+                                <li>Ou conectar seu roteador à porta LAN1 da ONU da Brisanet e configurar seu roteador com o Dhcp desativado, para evitar conflito das faixas ip </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <button class="faq-question w-full px-6 py-4 text-left font-medium text-gray-800 hover:bg-gray-50 focus:outline-none flex justify-between items-center">
+                            <span>Quanto tempo leva para ativar o IP fixo após a contratação?</span>
+                            <svg class="faq-arrow h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-answer px-6 py-4 bg-gray-50 hidden">
+                            <p class="text-gray-700">Geralmente, a ativação do IP fixo na Brisanet ocorre em até 48 horas após a contratação do serviço. onde vai ser necessária a visita de um técnico para realizar ajustes na configuração do equipamento, e a retirada do roteador da empresa. É recomendável verificar com o atendimento da Brisanet o prazo exato para sua região.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <button class="faq-question w-full px-6 py-4 text-left font-medium text-gray-800 hover:bg-gray-50 focus:outline-none flex justify-between items-center">
+                            <span>Existe alguma alternativa fora o IP fixo para resolver problemas de NAT na Brisanet?</span>
+                            <svg class="faq-arrow h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-answer px-6 py-4 bg-gray-50 hidden">
+                            <p class="text-gray-700">Infelizmente, devido à implementação do CGNAT na rede da Brisanet, não existem alternativas eficazes para resolver completamente os problemas de NAT sem a contratação de um IP fixo. Algumas soluções parciais incluem:</p>
+                            <ul class="list-disc pl-5 text-gray-700 mt-2">
+                                <li>Usar serviços VPN que oferecem encaminhamento de portas (como ZeroTier ou Tailscale)</li>
+                                <li>Utilizar serviços de relay para jogos específicos</li>
+                                <li>Verificar se o jogo ou aplicativo oferece opções para contornar problemas de NAT</li>
+                            </ul>
+                            <p class="text-gray-700 mt-2">No entanto, essas soluções geralmente adicionam latência e não são tão eficazes quanto ter um IP fixo com NAT Aberto.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <button class="faq-question w-full px-6 py-4 text-left font-medium text-gray-800 hover:bg-gray-50 focus:outline-none flex justify-between items-center">
+                            <span>Como posso verificar se meu NAT está realmente aberto após implementar a solução?</span>
+                            <svg class="faq-arrow h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-answer px-6 py-4 bg-gray-50 hidden">
+                            <p class="text-gray-700">Existem várias maneiras de verificar se seu NAT está aberto:</p>
+                            <ul class="list-disc pl-5 text-gray-700 mt-2">
+                                <li><strong>Em consoles:</strong> Acesse as configurações de rede do Xbox ou PlayStation, que geralmente mostram o tipo de NAT</li>
+                                <li><strong>Em PCs:</strong> Use ferramentas online como "Open Port Check Tool" ou "NAT Slap" para verificar se as portas estão abertas</li>
+                                <li><strong>Em jogos:</strong> Muitos jogos mostram o tipo de NAT nas configurações de rede ou lobby</li>
+                                <li><strong>Teste prático:</strong> Verifique se problemas anteriores como dificuldade em entrar em partidas ou usar chat de voz foram resolvidos</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- CTA -->
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-6">Resolva seus problemas de NAT na Brisanet</h2>
+                <p class="text-xl mb-8">Contrate um IP fixo e utilize um roteador próprio para obter a melhor experiência online</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="/#solucao-brisanet" class="bg-white text-blue-700 font-medium px-8 py-3 rounded-lg hover:bg-blue-50 transition duration-300">Ver Solução Completa</a>
+                    <a href="/#recomendacoes" class="bg-transparent border-2 border-white text-white font-medium px-8 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">Recomendações de Roteadores</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4 py-12">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-6 md:mb-0">
+                        <h2 class="text-2xl font-bold">Brisanet</h2>
+                        <p class="text-gray-400 mt-2">Outros Problemas</p>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <a href="https://alisonodb23.github.io/Cgnat/" class="text-gray-400 hover:text-white transition duration-300">Cgnat</a>
+                        <a href="https://alisonodb23.github.io/brisa-ping/" class="text-gray-400 hover:text-white transition duration-300">Ping</a>
+                        <a href="https://docs.google.com/presentation/d/1zV1aKZxOJ8y6GpZgWIbQew6cXhgYPJownnuIRfOW6M4/edit?slide=id.g203410fc01f_0_60#slide=id.g203410fc01f_0_60" class="text-gray-400 hover:text-white transition duration-300">Conflito ip</a>
+                        <a href="#faq" class="text-gray-400 hover:text-white transition duration-300">FAQ</a>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                    <p class="text-gray-400">© 2025 Alison Braga da Silva - Todos os direitos reservados</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tabs functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(btn => btn.classList.remove('text-blue-600', 'border-blue-600'));
+                    tabButtons.forEach(btn => btn.classList.add('text-gray-500'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    button.classList.remove('text-gray-500');
+                    button.classList.add('text-blue-600', 'border-blue-600');
+                    
+                    // Show corresponding content
+                    const contentId = 'content-' + button.id.substring(4);
+                    document.getElementById(contentId).classList.add('active');
+                });
+            });
+            
+            // FAQ functionality
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const answer = question.nextElementSibling;
+                    const arrow = question.querySelector('.faq-arrow');
+                    
+                    // Toggle answer visibility
+                    if (answer.classList.contains('hidden')) {
+                        answer.classList.remove('hidden');
+                        arrow.classList.add('rotate-180');
+                    } else {
+                        answer.classList.add('hidden');
+                        arrow.classList.remove('rotate-180');
+                    }
+                });
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
